@@ -50,7 +50,7 @@ global:
   
   privateRegistry:
     enabled: false
-    privateRegistryName: ~
+    privateRegistryRepoName: ~
   
 #################################
 ## Default tagged groups enabled
