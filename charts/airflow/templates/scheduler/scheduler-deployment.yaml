@@ -15,7 +15,7 @@
 {{- $elasticsearch := .Values.elasticsearch.enabled }}
 
 # If we're using gvisor
-{{- gvisor := .Values.gvisor.enabled }}
+{{- $gvisor := .Values.gvisor.enabled }}
 
 kind: {{ if $stateful }}StatefulSet{{ else }}Deployment{{ end }}
 apiVersion: apps/v1
