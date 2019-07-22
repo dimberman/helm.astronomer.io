@@ -282,6 +282,7 @@ registry:
 
 # run airflow on gvisor
 gvisor:
+  #enable gvisor
   enabled: false
 
 # Elasticsearch logging configuration
