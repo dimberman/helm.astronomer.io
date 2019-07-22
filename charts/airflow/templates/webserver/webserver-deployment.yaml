@@ -1,6 +1,11 @@
 ################################
 ## Airflow Webserver Deployment
 #################################
+
+
+# If we're using gvisor
+{{- gvisor := .Values.gvisor.enabled }}
+
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -35,6 +40,9 @@ spec:
         checksum/pgbouncer-config-secret: {{ include (print $.Template.BasePath "/secrets/pgbouncer-config-secret.yaml") . | sha256sum }}
         checksum/airflow-config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
+{{- if $gvisor }}
+      runtimeClassName: gvisor
+{{- end }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
       affinity:

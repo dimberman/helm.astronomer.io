@@ -14,6 +14,9 @@
 # If we're using elasticsearch logging
 {{- $elasticsearch := .Values.elasticsearch.enabled }}
 
+# If we're using gvisor
+{{- gvisor := .Values.gvisor.enabled }}
+
 kind: {{ if $stateful }}StatefulSet{{ else }}Deployment{{ end }}
 apiVersion: apps/v1
 metadata:
@@ -58,12 +61,17 @@ spec:
 {{ toYaml .Values.affinity | indent 8 }}
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
+{{- if $gvisor }}
+      runtimeClassName: gvisor
+{{- end }}
       restartPolicy: Always
       terminationGracePeriodSeconds: {{ if (or $local $kube)}}10{{ else }}{{ .Values.workers.terminationGracePeriodSeconds }}{{ end }}
       serviceAccountName: {{ .Release.Name }}-scheduler-serviceaccount
       securityContext:
         runAsUser: {{ .Values.uid }}
+{{- if not $gvisor }}
         fsGroup: {{ .Values.gid }}
+{{- end }}
       {{- if or .Values.registry.secretName .Values.registry.connection }}
       imagePullSecrets:
         - name: {{ template "registry_secret" . }}

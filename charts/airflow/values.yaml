@@ -9,6 +9,8 @@ gid: 101
 nodeSelector: {}
 affinity: {}
 tolerations: []
+gvisor:
+  enabled: false
 
 privateRegistry:
   enabled: false
