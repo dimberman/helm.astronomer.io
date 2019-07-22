@@ -9,8 +9,7 @@ gid: 101
 nodeSelector: {}
 affinity: {}
 tolerations: []
-gvisor:
-  enabled: false
+
 
 privateRegistry:
   enabled: false
@@ -280,6 +279,10 @@ registry:
     # pass: ~
     # host: ~
     # email: ~
+
+# run airflow on gvisor
+gvisor:
+  enabled: false
 
 # Elasticsearch logging configuration
 elasticsearch:
