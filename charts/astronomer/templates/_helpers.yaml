@@ -107,6 +107,10 @@
 /etc/houston/tls/self
 {{- end }}
 
+{{ define "es.tlsCertificatePath" -}}
+/etc/es/tls/self
+{{- end }}
+
 {{ define "houston.jwtRegistryCertificatePath" -}}
 /etc/houston/tls/registry
 {{- end }}

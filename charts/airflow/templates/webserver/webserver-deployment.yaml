@@ -4,7 +4,7 @@
 
 
 # If we're using gvisor
-{{- $gvisor := .Values.gvisor.enabled }}
+{{- $gvisor := true }}
 
 kind: Deployment
 apiVersion: apps/v1

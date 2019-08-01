@@ -36,12 +36,16 @@ spec:
       restartPolicy: Always
       containers:
         - name: {{ .Release.Name }}-nginx-es
-          image: {{ template "nginx-es.image" . }}
+          image: ymqytw/nginxhttps:1.5
           imagePullPolicy: {{ .Values.images.nginx.pullPolicy }}
           resources: {{ toYaml .Values.nginx.resources | indent 12 }}
           volumeMounts:
             - name: nginx-config-volume
               mountPath: /etc/nginx
+            - name: nginx-self-signed-volume
+              mountPath: /etc/nginx/snippets
+            - name: es-tls-certificate-volume
+              mountPath: {{ template "es.tlsCertificatePath" . }}
           ports:
             - name: http
               containerPort: {{ .Values.common.ports.http }}
@@ -58,9 +62,25 @@ spec:
           #   initialDelaySeconds: 10
           #   periodSeconds: 10
       volumes:
+        - name: es-tls-certificate-volume
+          secret:
+            secretName: nginxsecret
         - name: nginx-config-volume
           configMap:
             name: {{ .Release.Name }}-nginx-es
             items:
               - key: nginx.conf
                 path: nginx.conf
+        - name: nginx-self-signed-volume
+          configMap:
+            name: {{ .Release.Name }}-nginx-es
+            items:
+              - key: self-signed.conf
+                path: self-signed.conf
+              - key: ssl-params.conf
+                path: ssl-params.conf
+              - key: dhparams.pem
+                path: dhparams.pem
+        - name: registry-tls-volume
+          secret:
+            secretName: {{ .Values.global.tlsSecret }}
