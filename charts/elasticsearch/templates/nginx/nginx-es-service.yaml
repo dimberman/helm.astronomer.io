@@ -18,7 +18,6 @@ spec:
     component: es-ingress-controller
     release: {{ .Release.Name }}
   ports:
-    - port: {{ .Values.common.ports.http }}
-      targetPort: {{ .Values.common.ports.http }}
-      protocol: TCP
-      name: http
+    - port: 9200
+      targetPort: 9200
+      name: https

@@ -91,6 +91,10 @@
   {{ $config | toJson | print }}
 {{- end }}
 
+{{ define "es.tlsCertificatePath" -}}
+/etc/es/tls/self
+{{- end }}
+
 {{ define "houston.backendSecret" -}}
 {{ default (printf "%s-houston-backend" .Release.Name) .Values.houston.backendSecretName }}
 {{- end }}

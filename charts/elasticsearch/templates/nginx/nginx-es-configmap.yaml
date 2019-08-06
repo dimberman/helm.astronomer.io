@@ -24,28 +24,29 @@ data:
         server {{ .Release.Name }}-elasticsearch.{{ .Release.Namespace }}:{{ .Values.common.ports.http }};
         keepalive 15;
       }
-
       server {
-        listen {{ .Values.common.ports.http }};
+        listen 9200 ssl;
         auth_request /auth;
+        ssl_certificate /etc/nginx/ssl/tls.crt;
+        ssl_certificate_key /etc/nginx/ssl/tls.key;
         proxy_http_version 1.1;
         {{- if not .Values.global.istioEnabled }}
         proxy_set_header Host $host;
         {{- end }}
         proxy_set_header Connection "Keep-Alive";
         proxy_set_header Proxy-Connection "Keep-Alive";
-
         location ~ ^/ {
           proxy_pass http://elasticsearch;
         }
-
         location = /_search {
           # This combined with disabling explicit index searching downstream
           # prevents any deployment from being able to query any other indexes.
           rewrite ^/(.*) /fluentd.$remote_user.*/$1 break;
           proxy_pass http://elasticsearch;
         }
-
+        location = /healthz {
+          return 200;
+        }
         location = /auth {
           internal;
           proxy_pass http://{{ .Release.Name }}-houston.{{ .Release.Namespace }}:8871/v1/elasticsearch;
@@ -53,4 +54,28 @@ data:
           proxy_set_header X-Original-URI $request_uri;
         }
       }
+
     }
+
+  self-signed.conf:
+    ssl_certificate {{ template "es.tlsCertificatePath" . }}/tls.crt;
+    ssl_certificate_key {{ template "es.tlsCertificatePath" . }}/tls.key;
+  ssl-params.conf:
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+    ssl_ecdh_curve secp384r1;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_tickets off;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    resolver 8.8.8.8 8.8.4.4 valid=300s;
+    resolver_timeout 5s;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubdomains";
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+
+    ssl_dhparam /etc/nginx/snippets/dhparams.pem;
+  dhparams.pem: |
+    -----BEGIN DH PARAMETERS-----
+    MBYCEQC2po4TNzm9CbcF2An5fdSDAgEC
+    -----END DH PARAMETERS-----

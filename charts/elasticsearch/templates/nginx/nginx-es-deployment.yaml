@@ -42,9 +42,11 @@ spec:
           volumeMounts:
             - name: nginx-config-volume
               mountPath: /etc/nginx
+            - mountPath: /etc/nginx/ssl
+              name: secret-volume
           ports:
-            - name: http
-              containerPort: {{ .Values.common.ports.http }}
+            - name: https
+              containerPort: 9200
           # livenessProbe:
           #   httpGet:
           #     path: /healthz
@@ -64,3 +66,19 @@ spec:
             items:
               - key: nginx.conf
                 path: nginx.conf
+        - name: nginx-self-signed-volume
+          configMap:
+            name: {{ .Release.Name }}-nginx-es
+            items:
+              - key: self-signed.conf
+                path: self-signed.conf
+              - key: ssl-params.conf
+                path: ssl-params.conf
+              - key: dhparams.pem
+                path: dhparams.pem
+        - name: es-tls-certificate-volume
+          secret:
+            secretName: astronomer-houston-jwt-certificate
+        - name: secret-volume
+          secret:
+            secretName: nginxsecret
