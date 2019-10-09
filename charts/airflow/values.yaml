@@ -330,5 +330,6 @@ platform:
 
 # Configuration for postgresql subchart
 postgresql:
+  enabled: true
   postgresqlPassword: postgres
   postgresqlUsername: postgres

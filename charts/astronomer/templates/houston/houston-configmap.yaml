@@ -113,6 +113,11 @@ data:
           namespace: {{ .Release.Namespace }}
           singleNamespace: {{ .Values.global.singleNamespace | default false }}
 
+        # Disable the postgres subchart. The platform pass credentials down
+        # from the platform configuration.
+        postgresql:
+          enabled: false
+
     # If we're in single namespace mode, we will also
     # skip the configuration for elasticsearch. Houston will fallback
     # to its default modes, which are false/disabled.
