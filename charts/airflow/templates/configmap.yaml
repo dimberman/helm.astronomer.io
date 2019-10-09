@@ -77,8 +77,10 @@ data:
     workspace = {{ .Values.platform.workspace }}
 
     [astronomer]
+{{- if .Values.webserver.jwtSigningCertificateSecretName }}
     jwt_signing_cert = {{ template "airflow_webserver_jwt_cert_path" . }}
     jwt_audience = {{ include "airflow_url" . }}
+{{- end }}
 
   webserver_config.py: |
     import os
@@ -95,7 +97,9 @@ data:
     # ----------------------------------------------------
     # AUTHENTICATION CONFIG
     # ----------------------------------------------------
+{{- if .Values.webserver.jwtSigningCertificateSecretName }}
     AUTH_TYPE = AUTH_REMOTE_USER
 
     from astronomer.flask_appbuilder.security import AirflowAstroSecurityManager
     SECURITY_MANAGER_CLASS = AirflowAstroSecurityManager
+{{- end }}

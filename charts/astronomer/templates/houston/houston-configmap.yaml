@@ -77,6 +77,9 @@ data:
             requests:
               ephemeral-storage: "1Gi"
 
+          defaultUser:
+            enabled: false
+
         # Worker configuration (applies to Celery and Kubernetes task pods).
         workers:
           resources:

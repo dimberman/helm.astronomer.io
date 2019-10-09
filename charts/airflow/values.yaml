@@ -56,7 +56,7 @@ airflowVersion: "1.10.5"
 
 # Airflow executor
 # Options: SequentialExecutor, LocalExecutor, CeleryExecutor, KubernetesExecutor
-executor: "CeleryExecutor"
+executor: "KubernetesExecutor"
 
 # If this is true and using LocalExecutor/SequentialExecutor/KubernetesExecutor, the scheudler's
 # service account will have access to communicate with the api-server and launch pods.
@@ -110,18 +110,18 @@ data:
   resultBackendSecretName: ~
 
   # Otherwise pass connection values in
-  metadataConnection: {}
-    # user: ~
-    # pass: ~
-    # host: ~
-    # port: ~
-    # db: ~
-  resultBackendConnection: {}
-    # user: ~
-    # pass: ~
-    # host: ~
-    # port: ~
-    # db: ~
+  metadataConnection:
+    user: postgres
+    pass: postgres
+    host: ~
+    port: 5432
+    db: postgres
+  resultBackendConnection:
+    user: postgres
+    pass: postgres
+    host: ~
+    port: 5432
+    db: postgres
 
 # Fernet key settings
 fernetKey: ~
@@ -200,6 +200,16 @@ webserver:
 
   # Secret that contains the cert to verify JWTs
   jwtSigningCertificateSecretName: ~
+
+  # Create initial user.
+  defaultUser:
+    enabled: true
+    role: Admin
+    username: admin
+    email: admin@example.com
+    firstName: admin
+    lastName: user
+    password: admin
 
 # Flower settings
 flower:
@@ -317,3 +327,8 @@ platform:
   release: ~
   workspace: ""
   singleNamespace: true
+
+# Configuration for postgresql subchart
+postgresql:
+  postgresqlPassword: postgres
+  postgresqlUsername: postgres

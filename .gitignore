@@ -10,3 +10,6 @@ certs
 repository
 letsencrypt*
 backup
+
+# Chart dependencies
+**/charts/*.tgz
