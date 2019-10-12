@@ -323,10 +323,8 @@ limits: []
 # This is what allows for integration into platform ingress, network policies, metrics collection, etc.
 # This chart is completely deployable without specifying these values.
 platform:
-  namespace: ~
   release: ~
   workspace: ""
-  singleNamespace: true
 
 # Configuration for postgresql subchart
 postgresql:
