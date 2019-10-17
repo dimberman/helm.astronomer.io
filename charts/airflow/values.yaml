@@ -11,6 +11,9 @@ nodeSelector: {}
 affinity: {}
 tolerations: []
 
+# Add common labels to all objects and pods defined in this chart.
+labels: {}
+
 privateRegistry:
   enabled: false
   repository: ~
