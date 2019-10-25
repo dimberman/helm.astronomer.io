@@ -1,0 +1,58 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  labels:
+    serving.knative.dev/visibility: cluster-local
+  name: autoscale-airflow
+  namespace: airflow
+spec:
+  template:
+    metadata:
+      annotations:
+        # Target 10 in-flight-requests per pod.
+        autoscaling.knative.dev/target: "10"
+    spec:
+      containers:
+      - image: dev.local/ap-airflow:0.10.2-1.10.5-onbuild
+        imagePullPolicy: Never
+        args: ["airflow", "airflow_worker", "-w", "10"]
+        env:
+        - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+          valueFrom:
+            secretKeyRef:
+              name: airflow-airflow-metadata
+              key: connection
+        - name: AIRFLOW_CONN_AIRFLOW_DB
+          valueFrom:
+              secretKeyRef:
+                  name: airflow-airflow-metadata
+                  key: connection
+        - name: AIRFLOW__CORE__FERNET_KEY
+          valueFrom:
+              secretKeyRef:
+                  key: fernet-key
+                  name: airflow-fernet-key
+        volumeMounts:
+        - name: airflow-configmap
+          mountPath: /usr/local/airflow/airflow.cfg
+          subPath: airflow.cfg
+      volumes:
+      - name: airflow-configmap
+        configMap:
+          name: airflow-airflow-config

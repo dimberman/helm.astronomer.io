@@ -20,10 +20,14 @@ data:
     [core]
     load_examples = False
     colored_console_log = False
+    parallelism = 100
     executor = {{ .Values.executor }}
   {{- if .Values.elasticsearch.enabled }}
     remote_logging = True
   {{- end }}
+
+    [knative]
+    knative_host = {{ .Release.Name }}-knative.{{ .Release.Namespace }}.svc.cluster.local
 
     [webserver]
     base_url = {{ printf "https://%s" (include "airflow_url" .) }}

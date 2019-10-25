@@ -60,7 +60,7 @@ airflowVersion: "1.10.5"
 
 # Airflow executor
 # Options: SequentialExecutor, LocalExecutor, CeleryExecutor, KubernetesExecutor
-executor: "KubernetesExecutor"
+executor: "KnativeExecutor"
 
 # If this is true and using LocalExecutor/SequentialExecutor/KubernetesExecutor, the scheudler's
 # service account will have access to communicate with the api-server and launch pods.
@@ -305,6 +305,18 @@ elasticsearch:
     # pass: ~
     # host: ~
     # port: ~
+
+knative:
+  queue:
+    name: default
+    concurrency: 10
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 5Gi
+      requests:
+        cpu: 2000m
+        memory: 5Gi
 
 # All ports used by chart
 ports:
