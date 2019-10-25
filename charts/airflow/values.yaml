@@ -292,6 +292,18 @@ elasticsearch:
     # host: ~
     # port: ~
 
+knative:
+  queue:
+    name: default
+    concurrency: 10
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 5Gi
+      requests:
+        cpu: 2000m
+        memory: 5Gi
+
 # All ports used by chart
 ports:
   flowerUI: 5555

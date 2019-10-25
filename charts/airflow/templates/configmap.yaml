@@ -24,6 +24,9 @@ data:
     remote_logging = True
   {{- end }}
 
+    [knative]
+    knative_host = {{ .Release.Name }}-knative.{{ .Release.Namespace }}.svc.cluster.local
+
     [webserver]
     base_url = {{ printf "https://%s" (include "airflow_url" .) }}
     expose_config = True

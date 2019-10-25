@@ -1,0 +1,61 @@
+################################
+## Airflow Knative Worker Service
+#################################
+
+{{- if eq .Values.executor "KnativeExecutor" }}
+{{- $root := . -}}
+{{- $releaseName := .Release.Name }}
+{{- $releaseNamespace := .Release.Namespace }}
+
+{{- $releaseService := .Release.Service }}
+{{- $config := .Values.knative.queue }}
+
+
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: {{ $releaseName }}-knative
+  labels:
+    tier: airflow
+    component: worker
+    release: {{ $releaseName }}
+    platform: {{ $root.Values.platform.release }}
+    workspace: {{ $root.Values.platform.workspace | quote }}
+    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
+    heritage: {{ $releaseService }}
+    serving.knative.dev/visibility: cluster-local
+  namespace: {{ $releaseNamespace }}
+spec:
+  template:
+    metadata:
+      labels:
+        tier: airflow
+        component: worker
+        release: {{ .Release.Name }}
+        platform: {{ $root.Values.platform.release }}
+        workspace: {{ $root.Values.platform.workspace | quote }}
+      annotations:
+         autoscaling.knative.dev/target: "{{ $config.concurrency }}"
+    spec:
+      containers:
+      - name: worker
+        image: {{ template "airflow_image" . }}
+        imagePullPolicy: {{ $root.Values.images.airflow.pullPolicy }}
+        args: ["airflow", "airflow_worker", "-w", "{{ $config.concurrency }}" ]
+        env:
+          {{- include "custom_airflow_environment" . | indent 10 }}
+          {{- include "standard_airflow_environment" . | indent 10 }}
+        ports:
+          - containerPort: {{ $.Values.ports.knativeWorker }}
+        volumeMounts:
+          - name: config
+            mountPath: {{ template "airflow_config_path" . }}
+            subPath: airflow.cfg
+            readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "airflow_config" . }}
+{{- end }}
+
+{{- /* range $i, $config := .Values.knative.queues */ -}}
