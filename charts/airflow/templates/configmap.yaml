@@ -30,7 +30,7 @@ data:
   {{- end }}
 
 
-  [webserver]
+    [webserver]
     base_url = {{ printf "https://%s" (include "airflow_url" .) }}
     expose_config = True
     rbac = True
