@@ -1,0 +1,156 @@
+images:
+  airflow:
+    repository: registry.dev.steven-google-development.com/exact-astronaut-8418/airflow
+    tag: cli-4
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: astronomer.io/multi-tenant
+          operator: In
+          values:
+          - "true"
+airflowVersion: 1.10.5
+allowPodLaunching: true
+data:
+  metadataConnection:
+    db: exact_astronaut_8418_airflow
+    host: pg-sqlproxy-gcloud-sqlproxy.astronomer
+    pass: CwXeRY9mp1MBqm9aNeb56TcUXd5KpIo4
+    port: "5432"
+    user: exact_astronaut_8418_airflow
+  resultBackendConnection:
+    database: astronomer_houston
+    db: exact_astronaut_8418_airflow
+    host: pg-sqlproxy-gcloud-sqlproxy.astronomer
+    pass: engWx4rD1hzDjhAsT19VnAYWE33wqrBK
+    password: ytV7sItq
+    port: "5432"
+    user: exact_astronaut_8418_celery
+defaultAirflowVersion: 1.10.5
+elasticsearch:
+  connection:
+    host: astronomer-elasticsearch-nginx.astronomer
+    pass: e9287e88485d1a52ae16df6bf00acc2a
+    port: 9200
+    user: exact-astronaut-8418
+  enabled: true
+executor: KnativeExecutor
+flower:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 768Mi
+    requests:
+      cpu: 200m
+      memory: 768Mi
+ingress:
+  baseDomain: dev.steven-google-development.com
+  class: astronomer-nginx
+  enabled: true
+limits:
+- max:
+    cpu: 10000m
+    memory: 38400Mi
+  type: Pod
+- default:
+    cpu: 100m
+    memory: 384Mi
+  defaultRequest:
+    cpu: 100m
+    memory: 384Mi
+  type: Container
+networkPolicies:
+  enabled: true
+pgbouncer:
+  enabled: true
+  maxClientConn: 145
+  metadataPoolSize: 14
+  resources:
+    limits:
+      cpu: 200m
+      memory: 768Mi
+    requests:
+      cpu: 200m
+      memory: 768Mi
+  resultBackendPoolSize: 10
+platform:
+  namespace: astronomer
+  release: astronomer
+  singleNamespace: false
+  workspace: ck2mb14fc00an0902cqqi0dyu
+privateRegistry:
+  enabled: false
+  repository: null
+quotas:
+  limits.cpu: 8400m
+  limits.ephemeral-storage: 50Gi
+  limits.memory: 21952Mi
+  pods: 18
+  requests.cpu: 8400m
+  requests.ephemeral-storage: 50Gi
+  requests.memory: 21952Mi
+rbacEnabled: true
+redis:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 768Mi
+    requests:
+      cpu: 200m
+      memory: 768Mi
+registry:
+  connection:
+    email: admin@dev.steven-google-development.com
+    host: registry.dev.steven-google-development.com
+    pass: 89e79473f3e7e4879d3edb6978a00f74
+    user: exact-astronaut-8418
+scheduler:
+  resources:
+    limits:
+      cpu: 1000m
+      ephemeral-storage: 2Gi
+      memory: 3840Mi
+    requests:
+      cpu: 1000m
+      ephemeral-storage: 1Gi
+      memory: 3840Mi
+statsd:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 768Mi
+    requests:
+      cpu: 200m
+      memory: 768Mi
+webserver:
+  failureThreshold: 60
+  initialDelaySeconds: 15
+  jwtSigningCertificateSecretName: astronomer-houston-jwt-signing-certificate
+  periodSeconds: 8
+  resources:
+    limits:
+      cpu: 500m
+      ephemeral-storage: 2Gi
+      memory: 1920Mi
+    requests:
+      cpu: 500m
+      ephemeral-storage: 1Gi
+      memory: 1920Mi
+  timeoutSeconds: 30
+workers:
+  persistence:
+    enabled: false
+  replicas: 1
+  resources:
+    limits:
+      cpu: 1000m
+      ephemeral-storage: 10Gi
+      memory: 3840Mi
+    requests:
+      cpu: 1000m
+      ephemeral-storage: 1Gi
+      memory: 3840Mi
+  terminationGracePeriodSeconds: 600
+
