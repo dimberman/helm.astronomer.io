@@ -40,12 +40,15 @@ spec:
       serviceAccountName: {{ .Release.Name }}-knative-serviceaccount
       containers:
       - name: worker
+        resources:
+{{ toYaml $config.resources | indent 12 }}
+
         image: {{ template "airflow_image" . }}
         imagePullPolicy: {{ $root.Values.images.airflow.pullPolicy }}
         args: ["airflow", "airflow_worker", "-w", "{{ $config.concurrency }}" ]
         env:
-          {{- include "custom_airflow_environment" . | indent 10 }}
-          {{- include "standard_airflow_environment" . | indent 10 }}
+        {{- include "custom_airflow_environment" . | indent 10 }}
+        {{- include "standard_airflow_environment" . | indent 10 }}
         ports:
           - containerPort: {{ $.Values.ports.knativeWorker }}
         volumeMounts:
