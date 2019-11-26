@@ -29,7 +29,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: knative
+        tier: airflow
+        component: worker
+        release: {{ .Release.Name }}
+        platform: {{ $root.Values.platform.release }}
+        workspace: {{ $root.Values.platform.workspace | quote }}
   template:
     metadata:
       labels:
