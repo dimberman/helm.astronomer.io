@@ -1,7 +1,8 @@
 images:
   airflow:
-    repository: registry.dev.steven-google-development.com/desolate-axis-9554/airflow
-    tag: cli-1
+    repository: registry.dev.steven-google-development.com/ancient-intensity-9544/airflow
+    tag: cli-8
+executor: KnativeExecutor
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
@@ -15,28 +16,27 @@ airflowVersion: 1.10.5
 allowPodLaunching: true
 data:
   metadataConnection:
-    db: exact_astronaut_8418_airflow
+    db: ancient_intensity_9544_airflow
     host: pg-sqlproxy-gcloud-sqlproxy.astronomer
-    pass: CwXeRY9mp1MBqm9aNeb56TcUXd5KpIo4
+    pass: 3M39bs8MZkFwfxo0FRNgxXRsUEDoWfpH
     port: "5432"
-    user: exact_astronaut_8418_airflow
+    user: ancient_intensity_9544_airflow
   resultBackendConnection:
     database: astronomer_houston
-    db: exact_astronaut_8418_airflow
+    db: ancient_intensity_9544_airflow
     host: pg-sqlproxy-gcloud-sqlproxy.astronomer
-    pass: engWx4rD1hzDjhAsT19VnAYWE33wqrBK
+    pass: rQqM956R1RJnpPB33eJp2tY9E53x3PPt
     password: ytV7sItq
     port: "5432"
-    user: exact_astronaut_8418_celery
+    user: ancient_intensity_9544_celery
 defaultAirflowVersion: 1.10.5
 elasticsearch:
   connection:
     host: astronomer-elasticsearch-nginx.astronomer
-    pass: e9287e88485d1a52ae16df6bf00acc2a
+    pass: 4221d08b8e2532705af7d0a8840bbe5e
     port: 9200
-    user: exact-astronaut-8418
+    user: ancient-intensity-9544
   enabled: true
-executor: KnativeExecutor
 flower:
   resources:
     limits:
@@ -65,8 +65,8 @@ networkPolicies:
   enabled: true
 pgbouncer:
   enabled: true
-  maxClientConn: 145
-  metadataPoolSize: 14
+  maxClientConn: 2495
+  metadataPoolSize: 249
   resources:
     limits:
       cpu: 200m
@@ -84,13 +84,13 @@ privateRegistry:
   enabled: false
   repository: null
 quotas:
-  limits.cpu: 8400m
+  limits.cpu: 55400m
   limits.ephemeral-storage: 50Gi
-  limits.memory: 21952Mi
-  pods: 18
-  requests.cpu: 8400m
+  limits.memory: 202432Mi
+  pods: 488
+  requests.cpu: 55400m
   requests.ephemeral-storage: 50Gi
-  requests.memory: 21952Mi
+  requests.memory: 202432Mi
 rbacEnabled: true
 redis:
   resources:
@@ -104,18 +104,19 @@ registry:
   connection:
     email: admin@dev.steven-google-development.com
     host: registry.dev.steven-google-development.com
-    pass: 89e79473f3e7e4879d3edb6978a00f74
-    user: exact-astronaut-8418
+    pass: ced657594f9390e8f7a6ccd84a2fb09e
+    user: ancient-intensity-9544
 scheduler:
   resources:
     limits:
-      cpu: 1000m
-      ephemeral-storage: 2Gi
-      memory: 3840Mi
+      cpu: 2000m
+      ephemeral-storage: 3Gi
+      memory: 5840Mi
     requests:
-      cpu: 1000m
-      ephemeral-storage: 1Gi
-      memory: 3840Mi
+      cpu: 2000m
+      ephemeral-storage: 2Gi
+      memory: 5840Mi
+secret: []
 statsd:
   resources:
     limits:

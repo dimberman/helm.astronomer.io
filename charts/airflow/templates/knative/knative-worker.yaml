@@ -11,8 +11,8 @@
 {{- $config := .Values.knative.queue }}
 
 
-apiVersion: serving.knative.dev/v1alpha1
-kind: Service
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
   name: {{ $releaseName }}-knative
   labels:
@@ -26,6 +26,10 @@ metadata:
     serving.knative.dev/visibility: cluster-local
   namespace: {{ $releaseNamespace }}
 spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: knative
   template:
     metadata:
       labels:
