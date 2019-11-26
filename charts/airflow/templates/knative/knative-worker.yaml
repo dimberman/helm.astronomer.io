@@ -10,7 +10,22 @@
 {{- $releaseService := .Release.Service }}
 {{- $config := .Values.knative.queue }}
 
-
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $releaseName }}-knative
+spec:
+  selector:
+      tier: airflow
+      component: worker
+      release: {{ .Release.Name }}
+      platform: {{ $root.Values.platform.release }}
+      workspace: {{ $root.Values.platform.workspace | quote }}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
