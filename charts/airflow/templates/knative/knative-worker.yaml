@@ -41,7 +41,7 @@ metadata:
     serving.knative.dev/visibility: cluster-local
   namespace: {{ $releaseNamespace }}
 spec:
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels:
         tier: airflow
