@@ -65,7 +65,6 @@ spec:
       - name: worker
         resources:
 {{ toYaml $config.resources | indent 12 }}
-
         image: {{ template "airflow_image" . }}
         imagePullPolicy: {{ $root.Values.images.airflow.pullPolicy }}
         args: ["airflow", "airflow_worker", "-w", "{{ $config.concurrency }}" ]
@@ -74,6 +73,15 @@ spec:
         {{- include "standard_airflow_environment" . | indent 10 }}
         ports:
           - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            httpHeaders:
+              - name: Custom-Header
+                value: Awesome
+          initialDelaySeconds: 3
+          periodSeconds: 3
         volumeMounts:
           - name: config
             mountPath: {{ template "airflow_config_path" . }}
